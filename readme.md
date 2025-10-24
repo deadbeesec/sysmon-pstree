@@ -22,15 +22,25 @@ cd sysmon-pstree
 pip install -r requirements.txt
 ```
 
-##  Usage
-# Basic usage
+##  EVTX to ProcessTree Usage
+### Basic usage
 ```bash
 python sysmon2tree.py sysmon.evtx --html report.html
 ```
 
-# Limit events for faster parsing
+### Limit events for faster parsing
 ```bash
 python sysmon2tree.py "D:\sec\ctf\test.evtx" --max-events 50000 --html report.html
+```
+## CSV to ProcessTree Usage (Faster)
+### Use Evtxcmd to generate CSV
+```bash
+EvtxECmd.exe -f "C:\logs\Security.evtx" --csv "C:\output"
+```
+
+### CSV to ProcessTree
+```bash
+python sysmon_csv_tree.py "D:\sec\ctf\EvtxECmd_Output.csv" --html csv.html
 ```
 
 ## Requirements
@@ -42,4 +52,5 @@ Below is an example of the generated interactive HTML process tree:
 
 
 ![Sysmon Process Tree Screenshot](screenshot.png)
+
 
