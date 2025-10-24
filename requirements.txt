@@ -1,0 +1,2 @@
+python-evtx==0.8.1
+rich==13.7.0
