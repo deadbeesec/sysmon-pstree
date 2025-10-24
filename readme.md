@@ -24,10 +24,14 @@ pip install -r requirements.txt
 
 ##  Usage
 # Basic usage
+```bash
 python sysmon2tree.py sysmon.evtx --html report.html
+```
 
 # Limit events for faster parsing
+```bash
 python sysmon2tree.py "D:\sec\ctf\test.evtx" --max-events 50000 --html report.html
+```
 
 ## Requirements
 - Python 3.7+
@@ -35,5 +39,6 @@ python sysmon2tree.py "D:\sec\ctf\test.evtx" --max-events 50000 --html report.ht
 
 ## Preview
 Below is an example of the generated interactive HTML process tree:
+
 
 ![Sysmon Process Tree Screenshot](screenshot.png)
