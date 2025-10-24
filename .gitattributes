@@ -1,0 +1,5 @@
+# 忽略 HTML 报告文件，不计入语言统计
+report.html linguist-detectable=false
+
+# 或忽略所有 HTML 文件
+*.html linguist-detectable=false
