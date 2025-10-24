@@ -17,7 +17,7 @@ This project was originally developed to handle the challenge of **Offsec Provin
 ##  Installation
 
 ```bash
-git clone https://github.com/yourusername/sysmon-pstree.git
+git clone https://github.com/deadbeesec/sysmon-pstree.git
 cd sysmon-pstree
 pip install -r requirements.txt
 ```
@@ -42,3 +42,4 @@ Below is an example of the generated interactive HTML process tree:
 
 
 ![Sysmon Process Tree Screenshot](screenshot.png)
+
