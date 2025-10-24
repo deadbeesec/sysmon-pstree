@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Sysmon Process Tree Analyzer"""
+"""Sysmon Process Tree Analyzer by deadbeesec"""
  
 import os, sys, time, argparse
 from typing import Dict, List, Optional
@@ -180,22 +180,84 @@ body{{font-family:Consolas,monospace;background:linear-gradient(135deg,#667eea 0
 </div>
 <div class="tree-container">{self._gen_tree_html(roots)}</div>
 </div><script>
-function toggleProcess(e){{var d=e.nextElementSibling,c=d?d.nextElementSibling:null,t=e.querySelector('.toggle');
-if(d&&d.classList.contains('details'))d.classList.toggle('show');
-if(c&&c.classList.contains('children')){{c.classList.toggle('show');if(t)t.textContent=c.classList.contains('show')?'[-]':'[+]';}}}}
+function toggleProcess(header){{
+var proc = header.parentElement;
+var details = proc.querySelector('.details');
+var children = proc.querySelector('.children');
+var toggle = header.querySelector('.toggle');
+if(details) details.classList.toggle('show');
+if(children){{
+children.classList.toggle('show');
+if(toggle) toggle.textContent = children.classList.contains('show') ? '[-]' : '[+]';
+}}
+}}
 function expandAll(){{
-document.querySelectorAll('.children').forEach(c=>c.classList.add('show'));
-document.querySelectorAll('.toggle').forEach(t=>t.textContent='[-]');
+document.querySelectorAll('.details').forEach(d => d.classList.add('show'));
+document.querySelectorAll('.children').forEach(c => c.classList.add('show'));
+document.querySelectorAll('.toggle').forEach(t => {{if(t.textContent.trim()) t.textContent = '[-]';}});
 }}
 function collapseAll(){{
-document.querySelectorAll('.children').forEach(c=>c.classList.remove('show'));
-document.querySelectorAll('.toggle').forEach(t=>t.textContent='[+]');
+document.querySelectorAll('.details').forEach(d => d.classList.remove('show'));
+document.querySelectorAll('.children').forEach(c => c.classList.remove('show'));
+document.querySelectorAll('.toggle').forEach(t => {{if(t.textContent.trim()) t.textContent = '[+]';}});
 }}
-function searchProcess(){{var f=document.getElementById('searchInput').value.toLowerCase();
-document.querySelectorAll('.process').forEach(p=>{{p.style.display=p.textContent.toLowerCase().includes(f)?'':'none';}});}}
+function searchProcess(){{
+var filter = document.getElementById('searchInput').value.toLowerCase();
+var allProcs = document.querySelectorAll('.process');
+if(!filter){{
+allProcs.forEach(p => p.style.display = '');
+return;
+}}
+allProcs.forEach(p => p.style.display = 'none');
+allProcs.forEach(proc => {{
+var text = proc.textContent.toLowerCase();
+if(text.includes(filter)){{
+proc.style.display = '';
+var elem = proc.parentElement;
+while(elem){{
+if(elem.classList && elem.classList.contains('process')){{
+elem.style.display = '';
+}}
+if(elem.classList && elem.classList.contains('children')){{
+elem.classList.add('show');
+var parentProc = elem.parentElement;
+if(parentProc && parentProc.classList.contains('process')){{
+var parentHeader = parentProc.querySelector('.process-header');
+if(parentHeader){{
+var toggle = parentHeader.querySelector('.toggle');
+if(toggle) toggle.textContent = '[-]';
+}}
+}}
+}}
+elem = elem.parentElement;
+}}
+}}
+}});
+}}
 document.addEventListener('DOMContentLoaded',()=>{{
-document.querySelectorAll('.tree-container>.process>.process-header').forEach(h=>{{var c=h.parentElement.querySelector('.children');
-if(c){{c.classList.add('show');var t=h.querySelector('.toggle');if(t)t.textContent='[-]';}}}});}});
+document.querySelectorAll('.tree-container>.process>.process-header').forEach(h=>{{
+var parent = h.parentElement;
+var children = parent.querySelector('.children');
+if(children){{
+children.classList.add('show');
+var toggle = h.querySelector('.toggle');
+if(toggle)toggle.textContent='[-]';
+}}
+}});
+}}
+document.addEventListener('DOMContentLoaded', () => {{
+document.querySelectorAll('.tree-container > .process').forEach(rootProc => {{
+var children = rootProc.querySelector('.children');
+if(children){{
+children.classList.add('show');
+var header = rootProc.querySelector('.process-header');
+if(header){{
+var toggle = header.querySelector('.toggle');
+if(toggle) toggle.textContent = '[-]';
+}}
+}}
+}});
+}});
 </script></body></html>"""
         
         with open(output_file, 'w', encoding='utf-8') as f:
